@@ -2,15 +2,19 @@ import streamlit as st
 import joblib
 import os
 
-# Définition des chemins des fichiers
-model_path = os.path.join(os.path.dirname(__file__), "../model/xgb_fake_news_model.pkl")
-vectorizer_path = os.path.join(os.path.dirname(__file__), "../model/tfidf_vectorizer.pkl")
-
-# Chargement du modèle et du vectorizer
-@st.cache_data
 def load_model():
+    model_path = os.path.join("model", "xgb_fake_news_model.pkl")
+    vectorizer_path = os.path.join("model", "tfidf_vectorizer.pkl")
+
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Le fichier {model_path} est introuvable.")
+
+    if not os.path.exists(vectorizer_path):
+        raise FileNotFoundError(f"Le fichier {vectorizer_path} est introuvable.")
+
     model = joblib.load(model_path)
     vectorizer = joblib.load(vectorizer_path)
+    
     return model, vectorizer
 
 model, vectorizer = load_model()
